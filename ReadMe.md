@@ -13,8 +13,8 @@
 
 ## 利用ライブラリ
 
-- [CreateJS]
-- [Processing.js]
+- [CreateJS](http://createjs.com/)
+- [Processing.js](http://processingjs.org/)
 
 ## 完成した演出の利用事例
 
