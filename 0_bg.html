@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<style>
+		body {
+			background: #fff;
+			overflow: hidden;
+		}
+
+		#bg {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			/* 背景グラデーションの作成 */
+			background: linear-gradient(to bottom,
+			hsl(180, 80%, 40%),
+			hsl(240, 80%, 60%),
+			hsl(300, 80%, 40%));
+			background-size: 400% 400%;
+			animation: AnimationName 10s ease infinite;
+		}
+
+		@keyframes AnimationName {
+			0% {
+				background-position: 50% 0%
+			}
+			50% {
+				background-position: 50% 100%
+			}
+			100% {
+				background-position: 50% 0%
+			}
+		}
+	</style>
+</head>
+<body>
+<div id="bg"></div>
+</body>
+</html>

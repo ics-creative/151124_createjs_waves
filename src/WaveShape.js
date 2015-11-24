@@ -1,0 +1,104 @@
+///<reference path="../libs/easeljs/easeljs.d.ts" />
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var project;
+(function (project) {
+    "use strict";
+    /** Processing のパーリンノイズ(連続した乱数)関数へのショートカットです。 */
+    var noise;
+    /**
+     * ウェーブ風グラフィックの表示クラスです。
+     * @author Yasunobu Ikeda a.k.a clockmaker
+     * @see FrocessingSample by nutsu http://wonderfl.net/c/kvXp
+     */
+    var WaveShape = (function (_super) {
+        __extends(WaveShape, _super);
+        function WaveShape() {
+            _super.call(this);
+            this.time = 0;
+            /** 線自体の個数です。 */
+            this.MAX_LINES = 10;
+            /** 線の水平方向の頂点数です。 */
+            this.MAX_VERTEX = 10;
+            // やむを得ない超残念実装
+            noise = new Processing().noise;
+            this.vertexArr = [];
+            for (var i = 0; i < this.MAX_LINES; i++) {
+                this.vertexArr[i] = [];
+                var num = (this.MAX_VERTEX - 1) * Math.random() * Math.random() + 1;
+                for (var j = 0; j <= num; j++) {
+                    this.vertexArr[i][j] = 0;
+                }
+            }
+            this.on("tick", this.handleTick, this);
+        }
+        /**
+         * エンターフレームイベント
+         * @param event
+         */
+        WaveShape.prototype.handleTick = function (event) {
+            this.time += 0.005;
+            this.graphics.clear();
+            for (var i = 0; i < this.MAX_LINES; i++) {
+                this.drawWave(this.vertexArr[i], (0.05 * i) + 0.001, // ゼロ対策(ゼロのときに太さが1pxになるため)
+                i * 0.10);
+            }
+        };
+        /**
+         * ウェーブを描きます。
+         * @param vertexArr    頂点配列
+         * @param strokeSize    線の太さ
+         * @param timeOffset    波のオフセット
+         */
+        WaveShape.prototype.drawWave = function (vertexArr, strokeSize, timeOffset) {
+            var vertexNum = vertexArr.length - 1;
+            var stageW = window.innerWidth;
+            var stageH = window.innerHeight;
+            // 線のスタイルを設定
+            this.graphics.setStrokeStyle(strokeSize).beginStroke("white");
+            // 波の次の目標値を計算
+            for (var i = 0; i <= vertexNum; i++) {
+                vertexArr[i] += (((noise(i * 0.2, this.time + timeOffset) - 0.5) * innerHeight * 2) - vertexArr[i]) * 0.05;
+            }
+            // 曲線を描くためにXY座標を計算
+            var BASE_Y = stageH / 2;
+            var points = [];
+            points.push({ x: -200, y: BASE_Y });
+            for (var i = 0; i <= vertexNum; i++) {
+                points.push({
+                    x: (stageW * (i / vertexNum)) >> 0,
+                    y: vertexArr[i] + BASE_Y
+                });
+            }
+            points.push({ x: stageW + 200, y: BASE_Y });
+            // 直線情報を曲線にするテクニック
+            // 参考 : http://jsdo.it/clockmaker/createjs-curveto
+            for (var i = 0; i < points.length; i++) {
+                if (i >= 2) {
+                    // マウスの軌跡を変数に保存
+                    var p0x = points[i - 0].x;
+                    var p0y = points[i - 0].y;
+                    var p1x = points[i - 1].x;
+                    var p1y = points[i - 1].y;
+                    var p2x = points[i - 2].x;
+                    var p2y = points[i - 2].y;
+                    // カーブ用の頂点を割り出す
+                    var curveStartX = (p2x + p1x) / 2;
+                    var curveStartY = (p2y + p1y) / 2;
+                    var curveEndX = (p0x + p1x) / 2;
+                    var curveEndY = (p0y + p1y) / 2;
+                    // カーブは中間点を結ぶ。マウスの座標は制御点として扱う。
+                    this.graphics
+                        .moveTo(curveStartX, curveStartY)
+                        .curveTo(p1x, p1y, curveEndX, curveEndY);
+                }
+            }
+            this.graphics.endStroke();
+        };
+        return WaveShape;
+    })(createjs.Shape);
+    project.WaveShape = WaveShape;
+})(project || (project = {}));

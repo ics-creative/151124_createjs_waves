@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<script src="https://code.createjs.com/createjs-2015.05.21.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.16/processing.min.js"></script>
+	<script src="src/SpotLightShape.js"></script>
+	<script src="src/WaveShape.js"></script>
+	<script src="src/4_spotlight_and_wave.js"></script>
+	<style>
+		body {
+			background: #fff;
+			overflow: hidden;
+		}
+
+		#canvasOverlay {
+			position: absolute;
+			top: 0;
+			left: 0;
+			background: #000;
+			width: 100%;
+			height: 100%;
+			mix-blend-mode: hard-light;
+		}
+
+		#bg {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			/* 背景グラデーションの作成 */
+			background: linear-gradient(to bottom,
+			hsl(180, 80%, 40%),
+			hsl(240, 80%, 60%),
+			hsl(300, 80%, 40%));
+			background-size: 400% 400%;
+			animation: AnimationName 10s ease infinite;
+		}
+
+		@keyframes AnimationName {
+			0% {
+				background-position: 50% 0%
+			}
+			50% {
+				background-position: 50% 100%
+			}
+			100% {
+				background-position: 50% 0%
+			}
+		}
+	</style>
+</head>
+<body>
+<div id="bg"></div>
+<canvas id="canvasOverlay"></canvas>
+</body>
+</html>
