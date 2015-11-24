@@ -18,6 +18,7 @@ var project;
         __extends(WaveShape, _super);
         function WaveShape() {
             _super.call(this);
+            /** 時間経過を示す媒介変数です。 */
             this.time = 0;
             /** 線自体の個数です。 */
             this.MAX_LINES = 10;
@@ -26,10 +27,13 @@ var project;
             // やむを得ない超残念実装
             noise = new Processing().noise;
             this.vertexArr = [];
+            // Yの頂点座標の初期値を設定
             for (var i = 0; i < this.MAX_LINES; i++) {
                 this.vertexArr[i] = [];
+                // 頂点座標の上限値はランダムで
                 var num = (this.MAX_VERTEX - 1) * Math.random() * Math.random() + 1;
                 for (var j = 0; j <= num; j++) {
+                    // 初期値は全て0で。
                     this.vertexArr[i][j] = 0;
                 }
             }
@@ -40,8 +44,11 @@ var project;
          * @param event
          */
         WaveShape.prototype.handleTick = function (event) {
+            // 媒介変数を更新
             this.time += 0.005;
+            // グラフィックをクリア
             this.graphics.clear();
+            // 曲線を描き直す
             for (var i = 0; i < this.MAX_LINES; i++) {
                 this.drawWave(this.vertexArr[i], (0.05 * i) + 0.001, // ゼロ対策(ゼロのときに太さが1pxになるため)
                 i * 0.10);
@@ -58,21 +65,31 @@ var project;
             var stageW = window.innerWidth;
             var stageH = window.innerHeight;
             // 線のスタイルを設定
-            this.graphics.setStrokeStyle(strokeSize).beginStroke("white");
+            this.graphics
+                .setStrokeStyle(strokeSize)
+                .beginStroke("white");
             // 波の次の目標値を計算
             for (var i = 0; i <= vertexNum; i++) {
-                vertexArr[i] += (((noise(i * 0.2, this.time + timeOffset) - 0.5) * innerHeight * 2) - vertexArr[i]) * 0.05;
+                // 乱数を取得、-0.5〜+0.5の範囲
+                var noiseNum = noise(i * 0.2, this.time + timeOffset) - 0.5;
+                // 目標座標を計算。画面の高さに比例
+                var targetY = noiseNum * stageH * 2;
+                // イージングの公式を使って、頂点座標をなめらかに変化させる
+                vertexArr[i] += (targetY - vertexArr[i]) * 0.05;
             }
             // 曲線を描くためにXY座標を計算
-            var BASE_Y = stageH / 2;
+            var BASE_Y = stageH / 2; // 基準は画面の中央のY座標
             var points = [];
+            // 画面左端の座標
             points.push({ x: -200, y: BASE_Y });
             for (var i = 0; i <= vertexNum; i++) {
+                // 途中座標
                 points.push({
                     x: (stageW * (i / vertexNum)) >> 0,
                     y: vertexArr[i] + BASE_Y
                 });
             }
+            // 画面右端の座標
             points.push({ x: stageW + 200, y: BASE_Y });
             // 直線情報を曲線にするテクニック
             // 参考 : http://jsdo.it/clockmaker/createjs-curveto

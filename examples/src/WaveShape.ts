@@ -13,8 +13,13 @@ namespace project {
 	 */
 	export class WaveShape extends createjs.Shape {
 
+		/** 時間経過を示す媒介変数です。 */
 		private time:number = 0;
-		private vertexArr:any[][];
+		/**
+		 * 曲線の頂点座標(Y座標)の配列です。
+		 * 滑らかな曲線にするため配列に保持してイージングを摘要して管理しています。
+		 */
+		private vertexArr:number[][];
 		/** 線自体の個数です。 */
 		private MAX_LINES:number = 10;
 		/** 線の水平方向の頂点数です。 */
@@ -28,10 +33,13 @@ namespace project {
 
 			this.vertexArr = [];
 
+			// Yの頂点座標の初期値を設定
 			for (let i = 0; i < this.MAX_LINES; i++) {
 				this.vertexArr[i] = [];
+				// 頂点座標の上限値はランダムで
 				let num = (this.MAX_VERTEX - 1) * Math.random() * Math.random() + 1;
 				for (let j = 0; j <= num; j++) {
+					// 初期値は全て0で。
 					this.vertexArr[i][j] = 0;
 				}
 			}
@@ -44,10 +52,13 @@ namespace project {
 		 * @param event
 		 */
 		private handleTick(event:createjs.Event):void {
+			// 媒介変数を更新
 			this.time += 0.005;
 
+			// グラフィックをクリア
 			this.graphics.clear();
 
+			// 曲線を描き直す
 			for (let i = 0; i < this.MAX_LINES; i++) {
 				this.drawWave(
 					this.vertexArr[i],
@@ -63,30 +74,42 @@ namespace project {
 		 * @param strokeSize    線の太さ
 		 * @param timeOffset    波のオフセット
 		 */
-		private drawWave(vertexArr:number[], strokeSize:number, timeOffset:number):void {
+		private drawWave(vertexArr:number[],
+						 strokeSize:number,
+						 timeOffset:number):void {
 
 			const vertexNum = vertexArr.length - 1;
-			var stageW = window.innerWidth;
-			var stageH = window.innerHeight;
+			const stageW = window.innerWidth;
+			const stageH = window.innerHeight;
 
 			// 線のスタイルを設定
-			this.graphics.setStrokeStyle(strokeSize).beginStroke("white");
+			this.graphics
+				.setStrokeStyle(strokeSize)
+				.beginStroke("white");
 
 			// 波の次の目標値を計算
 			for (let i = 0; i <= vertexNum; i++) {
-				vertexArr[i] += (((noise(i * 0.2, this.time + timeOffset) - 0.5) * innerHeight * 2) - vertexArr[i]) * 0.05;
+				// 乱数を取得、-0.5〜+0.5の範囲
+				let noiseNum = noise(i * 0.2, this.time + timeOffset) - 0.5;
+				// 目標座標を計算。画面の高さに比例
+				let targetY = noiseNum * stageH * 2;
+				// イージングの公式を使って、頂点座標をなめらかに変化させる
+				vertexArr[i] += (targetY - vertexArr[i]) * 0.05;
 			}
 
 			// 曲線を描くためにXY座標を計算
-			const BASE_Y = stageH / 2;
+			const BASE_Y = stageH / 2; // 基準は画面の中央のY座標
 			const points:{x:number, y:number}[] = [];
+			// 画面左端の座標
 			points.push({x: -200, y: BASE_Y});
 			for (let i = 0; i <= vertexNum; i++) {
+				// 途中座標
 				points.push({
 					x: (stageW * (i / vertexNum)) >> 0,
 					y: vertexArr[i] + BASE_Y
 				});
 			}
+			// 画面右端の座標
 			points.push({x: stageW + 200, y: BASE_Y});
 
 			// 直線情報を曲線にするテクニック
