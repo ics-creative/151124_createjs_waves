@@ -20,27 +20,31 @@ var project;
          * コンストラクターです。
          * @param maxLines  線自体の個数です。
          * @param maxVertex 線の水平方向の頂点数です。
+         * @param debugMode デバッグモードとして実行するかの設定です。trueの場合、デバッグ表示が有効になります。
          */
-        function WaveShape(maxLines, maxVertex) {
+        function WaveShape(maxLines, maxVertex, debugMode) {
             if (maxLines === void 0) { maxLines = 10; }
             if (maxVertex === void 0) { maxVertex = 10; }
+            if (debugMode === void 0) { debugMode = false; }
             _super.call(this);
             /** 時間経過を示す媒介変数です。 */
             this._time = 0;
-            /** 線自体の個数です。 */
-            this._maxLines = 10;
-            /** 線の水平方向の頂点数です。 */
-            this._maxVertex = 10;
             // やむを得ない超残念実装
             noise = new Processing().noise;
             this._maxLines = maxLines;
             this._maxVertex = maxVertex;
+            this._debugMode = debugMode;
             this._vertexArr = [];
             // Yの頂点座標の初期値を設定
             for (var i = 0; i < this._maxLines; i++) {
                 this._vertexArr[i] = [];
                 // 頂点座標の上限値はランダムで
                 var num = (this._maxVertex - 1) * Math.random() * Math.random() + 1;
+                // デバッグ機能が有効の場合は
+                if (this._debugMode == true) {
+                    // 頂点数は引数で設定したものと同じ値に設定する
+                    num = this._maxVertex;
+                }
                 for (var j = 0; j <= num; j++) {
                     // 初期値は全て0で。
                     this._vertexArr[i][j] = 0;
@@ -59,8 +63,13 @@ var project;
             this.graphics.clear();
             // 曲線を描き直す
             for (var i = 0; i < this._maxLines; i++) {
-                this.drawWave(this._vertexArr[i], (0.05 * i) + 0.001, // ゼロ対策(ゼロのときに太さが1pxになるため)
-                i * 0.10);
+                var lineWidth = (0.05 * i) + 0.10; // ゼロ対策(ゼロのときに太さが1pxになるため)
+                // デバッグ機能が有効の場合は
+                if (this._debugMode == true) {
+                    // 線を2pxで描く
+                    lineWidth = 1.0;
+                }
+                this.drawWave(this._vertexArr[i], lineWidth, i * 0.10);
             }
         };
         /**
@@ -123,6 +132,31 @@ var project;
                 }
             }
             this.graphics.endStroke();
+            // デバッグ機能
+            // 曲線のもとになっている頂点を可視化
+            if (this._debugMode == true) {
+                for (var i = 0; i < points.length; i++) {
+                    // マウスの軌跡を変数に保存
+                    var p0x = points[i - 0].x;
+                    var p0y = points[i - 0].y;
+                    if (i > 0) {
+                        var p1x = points[i - 1].x;
+                        var p1y = points[i - 1].y;
+                        // 線を描く
+                        this.graphics
+                            .setStrokeStyle(0.5)
+                            .beginStroke("red")
+                            .moveTo(p1x, p1y)
+                            .lineTo(p0x, p0y)
+                            .endStroke();
+                    }
+                    // 点をプロットする
+                    this.graphics
+                        .beginFill("red")
+                        .drawCircle(p0x, p0y, 3)
+                        .endFill();
+                }
+            }
         };
         return WaveShape;
     })(createjs.Shape);
