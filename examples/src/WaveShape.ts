@@ -14,33 +14,41 @@ namespace project {
 	export class WaveShape extends createjs.Shape {
 
 		/** 時間経過を示す媒介変数です。 */
-		private time:number = 0;
+		private _time:number = 0;
 		/**
 		 * 曲線の頂点座標(Y座標)の配列です。
 		 * 滑らかな曲線にするため配列に保持してイージングを摘要して管理しています。
 		 */
-		private vertexArr:number[][];
+		private _vertexArr:number[][];
 		/** 線自体の個数です。 */
-		private MAX_LINES:number = 10;
+		private _maxLines:number = 10;
 		/** 線の水平方向の頂点数です。 */
-		private MAX_VERTEX:number = 10;
+		private _maxVertex:number = 10;
 
-		constructor() {
+		/**
+		 * コンストラクターです。
+		 * @param maxLines  線自体の個数です。
+		 * @param maxVertex 線の水平方向の頂点数です。
+		 */
+		constructor(maxLines:number = 10, maxVertex:number = 10) {
 			super();
 
 			// やむを得ない超残念実装
 			noise = new Processing().noise;
 
-			this.vertexArr = [];
+			this._maxLines = maxLines;
+			this._maxVertex = maxVertex;
+
+			this._vertexArr = [];
 
 			// Yの頂点座標の初期値を設定
-			for (let i = 0; i < this.MAX_LINES; i++) {
-				this.vertexArr[i] = [];
+			for (let i = 0; i < this._maxLines; i++) {
+				this._vertexArr[i] = [];
 				// 頂点座標の上限値はランダムで
-				let num = (this.MAX_VERTEX - 1) * Math.random() * Math.random() + 1;
+				let num = (this._maxVertex - 1) * Math.random() * Math.random() + 1;
 				for (let j = 0; j <= num; j++) {
 					// 初期値は全て0で。
-					this.vertexArr[i][j] = 0;
+					this._vertexArr[i][j] = 0;
 				}
 			}
 
@@ -53,15 +61,15 @@ namespace project {
 		 */
 		private handleTick(event:createjs.Event):void {
 			// 媒介変数を更新
-			this.time += 0.005;
+			this._time += 0.005;
 
 			// グラフィックをクリア
 			this.graphics.clear();
 
 			// 曲線を描き直す
-			for (let i = 0; i < this.MAX_LINES; i++) {
+			for (let i = 0; i < this._maxLines; i++) {
 				this.drawWave(
-					this.vertexArr[i],
+					this._vertexArr[i],
 					(0.05 * i) + 0.001, // ゼロ対策(ゼロのときに太さが1pxになるため)
 					i * 0.10);
 			}
@@ -75,8 +83,8 @@ namespace project {
 		 * @param timeOffset    波のオフセット
 		 */
 		private drawWave(vertexArr:number[],
-						 strokeSize:number,
-						 timeOffset:number):void {
+		                 strokeSize:number,
+		                 timeOffset:number):void {
 
 			const vertexNum = vertexArr.length - 1;
 			const stageW = window.innerWidth;
@@ -90,7 +98,7 @@ namespace project {
 			// 波の次の目標値を計算
 			for (let i = 0; i <= vertexNum; i++) {
 				// 乱数を取得、-0.5〜+0.5の範囲
-				let noiseNum = noise(i * 0.2, this.time + timeOffset) - 0.5;
+				let noiseNum = noise(i * 0.2, this._time + timeOffset) - 0.5;
 				// 目標座標を計算。画面の高さに比例
 				let targetY = noiseNum * stageH * 2;
 				// イージングの公式を使って、頂点座標をなめらかに変化させる

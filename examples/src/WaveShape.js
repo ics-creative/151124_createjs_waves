@@ -16,25 +16,34 @@ var project;
      */
     var WaveShape = (function (_super) {
         __extends(WaveShape, _super);
-        function WaveShape() {
+        /**
+         * コンストラクターです。
+         * @param maxLines  線自体の個数です。
+         * @param maxVertex 線の水平方向の頂点数です。
+         */
+        function WaveShape(maxLines, maxVertex) {
+            if (maxLines === void 0) { maxLines = 10; }
+            if (maxVertex === void 0) { maxVertex = 10; }
             _super.call(this);
             /** 時間経過を示す媒介変数です。 */
-            this.time = 0;
+            this._time = 0;
             /** 線自体の個数です。 */
-            this.MAX_LINES = 10;
+            this._maxLines = 10;
             /** 線の水平方向の頂点数です。 */
-            this.MAX_VERTEX = 10;
+            this._maxVertex = 10;
             // やむを得ない超残念実装
             noise = new Processing().noise;
-            this.vertexArr = [];
+            this._maxLines = maxLines;
+            this._maxVertex = maxVertex;
+            this._vertexArr = [];
             // Yの頂点座標の初期値を設定
-            for (var i = 0; i < this.MAX_LINES; i++) {
-                this.vertexArr[i] = [];
+            for (var i = 0; i < this._maxLines; i++) {
+                this._vertexArr[i] = [];
                 // 頂点座標の上限値はランダムで
-                var num = (this.MAX_VERTEX - 1) * Math.random() * Math.random() + 1;
+                var num = (this._maxVertex - 1) * Math.random() * Math.random() + 1;
                 for (var j = 0; j <= num; j++) {
                     // 初期値は全て0で。
-                    this.vertexArr[i][j] = 0;
+                    this._vertexArr[i][j] = 0;
                 }
             }
             this.on("tick", this.handleTick, this);
@@ -45,12 +54,12 @@ var project;
          */
         WaveShape.prototype.handleTick = function (event) {
             // 媒介変数を更新
-            this.time += 0.005;
+            this._time += 0.005;
             // グラフィックをクリア
             this.graphics.clear();
             // 曲線を描き直す
-            for (var i = 0; i < this.MAX_LINES; i++) {
-                this.drawWave(this.vertexArr[i], (0.05 * i) + 0.001, // ゼロ対策(ゼロのときに太さが1pxになるため)
+            for (var i = 0; i < this._maxLines; i++) {
+                this.drawWave(this._vertexArr[i], (0.05 * i) + 0.001, // ゼロ対策(ゼロのときに太さが1pxになるため)
                 i * 0.10);
             }
         };
@@ -71,7 +80,7 @@ var project;
             // 波の次の目標値を計算
             for (var i = 0; i <= vertexNum; i++) {
                 // 乱数を取得、-0.5〜+0.5の範囲
-                var noiseNum = noise(i * 0.2, this.time + timeOffset) - 0.5;
+                var noiseNum = noise(i * 0.2, this._time + timeOffset) - 0.5;
                 // 目標座標を計算。画面の高さに比例
                 var targetY = noiseNum * stageH * 2;
                 // イージングの公式を使って、頂点座標をなめらかに変化させる
