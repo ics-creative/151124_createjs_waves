@@ -24,32 +24,18 @@ var project;
          */
         function WaveShape(maxLines, maxVertex, debugMode) {
             if (maxLines === void 0) { maxLines = 10; }
-            if (maxVertex === void 0) { maxVertex = 10; }
+            if (maxVertex === void 0) { maxVertex = 5; }
             if (debugMode === void 0) { debugMode = false; }
             _super.call(this);
-            /** 時間経過を示す媒介変数です。 */
+            /** 時間経過を示す媒介変数です。
+             * @type {number}
+             */
             this._time = 0;
             // やむを得ない超残念実装
             noise = new Processing().noise;
             this._maxLines = maxLines;
             this._maxVertex = maxVertex;
             this._debugMode = debugMode;
-            this._vertexArr = [];
-            // Yの頂点座標の初期値を設定
-            for (var i = 0; i < this._maxLines; i++) {
-                this._vertexArr[i] = [];
-                // 頂点座標の上限値はランダムで
-                var num = (this._maxVertex - 1) * Math.random() * Math.random() + 1;
-                // デバッグ機能が有効の場合は
-                if (this._debugMode == true) {
-                    // 頂点数は引数で設定したものと同じ値に設定する
-                    num = this._maxVertex;
-                }
-                for (var j = 0; j <= num; j++) {
-                    // 初期値は全て0で。
-                    this._vertexArr[i][j] = 0;
-                }
-            }
             this.on("tick", this.handleTick, this);
         }
         /**
@@ -69,7 +55,7 @@ var project;
                     // 線を2pxで描く
                     lineWidth = 1.0;
                 }
-                this.drawWave(this._vertexArr[i], lineWidth, i * 0.10);
+                this.drawWave(this._maxVertex, lineWidth, i * 0.10);
             }
         };
         /**
@@ -78,14 +64,14 @@ var project;
          * @param strokeSize    線の太さ
          * @param timeOffset    波のオフセット
          */
-        WaveShape.prototype.drawWave = function (vertexArr, strokeSize, timeOffset) {
-            var vertexNum = vertexArr.length - 1;
+        WaveShape.prototype.drawWave = function (vertexNum, strokeSize, timeOffset) {
             var stageW = window.innerWidth;
             var stageH = window.innerHeight;
             // 線のスタイルを設定
             this.graphics
                 .setStrokeStyle(strokeSize)
                 .beginStroke("white");
+            var vertexArr = [];
             // 波の次の目標値を計算
             for (var i = 0; i <= vertexNum; i++) {
                 // 乱数を取得、-0.5〜+0.5の範囲

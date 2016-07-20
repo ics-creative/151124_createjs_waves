@@ -13,13 +13,10 @@ namespace project {
 	 */
 	export class WaveShape extends createjs.Shape {
 
-		/** 時間経過を示す媒介変数です。 */
-		private _time:number = 0;
-		/**
-		 * 曲線の頂点座標(Y座標)の配列です。
-		 * 滑らかな曲線にするため配列に保持してイージングを摘要して管理しています。
+		/** 時間経過を示す媒介変数です。
+		 * @type {number}
 		 */
-		private _vertexArr:number[][];
+		private _time:number = 0;
 		/** 線自体の個数です。 */
 		private _maxLines:number;
 		/** 線の水平方向の頂点数です。 */
@@ -34,7 +31,7 @@ namespace project {
 		 * @param debugMode デバッグモードとして実行するかの設定です。trueの場合、デバッグ表示が有効になります。
 		 */
 		constructor(maxLines:number = 10,
-		            maxVertex:number = 10,
+		            maxVertex:number = 5,
 		            debugMode:boolean = false) {
 			super();
 
@@ -44,26 +41,6 @@ namespace project {
 			this._maxLines = maxLines;
 			this._maxVertex = maxVertex;
 			this._debugMode = debugMode;
-
-			this._vertexArr = [];
-
-			// Yの頂点座標の初期値を設定
-			for (let i = 0; i < this._maxLines; i++) {
-				this._vertexArr[i] = [];
-				// 頂点座標の上限値はランダムで
-				let num = (this._maxVertex - 1) * Math.random() * Math.random() + 1;
-
-				// デバッグ機能が有効の場合は
-				if (this._debugMode == true) {
-					// 頂点数は引数で設定したものと同じ値に設定する
-					num = this._maxVertex;
-				}
-
-				for (let j = 0; j <= num; j++) {
-					// 初期値は全て0で。
-					this._vertexArr[i][j] = 0;
-				}
-			}
 
 			this.on("tick", this.handleTick, this);
 		}
@@ -92,7 +69,7 @@ namespace project {
 				}
 
 				this.drawWave(
-					this._vertexArr[i],
+					this._maxVertex,
 					lineWidth,
 					i * 0.10
 				);
@@ -106,11 +83,10 @@ namespace project {
 		 * @param strokeSize    線の太さ
 		 * @param timeOffset    波のオフセット
 		 */
-		private drawWave(vertexArr:number[],
-		                 strokeSize:number,
+		private drawWave(vertexNum:number,
+											strokeSize:number,
 		                 timeOffset:number):void {
 
-			const vertexNum = vertexArr.length - 1;
 			const stageW = window.innerWidth;
 			const stageH = window.innerHeight;
 
@@ -118,6 +94,8 @@ namespace project {
 			this.graphics
 				.setStrokeStyle(strokeSize)
 				.beginStroke("white");
+
+			const vertexArr:number[] = [];
 
 			// 波の次の目標値を計算
 			for (let i = 0; i <= vertexNum; i++) {
