@@ -13,7 +13,8 @@ namespace project {
 	 */
 	export class WaveShape extends createjs.Shape {
 
-		/** 時間経過を示す媒介変数です。
+		/**
+		 * 時間経過を示す媒介変数です。
 		 * @type {number}
 		 */
 		private _time:number = 0;
@@ -31,8 +32,8 @@ namespace project {
 		 * @param debugMode デバッグモードとして実行するかの設定です。trueの場合、デバッグ表示が有効になります。
 		 */
 		constructor(maxLines:number = 10,
-		            maxVertex:number = 5,
-		            debugMode:boolean = false) {
+								maxVertex:number = 5,
+								debugMode:boolean = false) {
 			super();
 
 			// やむを得ない超残念実装
@@ -84,8 +85,8 @@ namespace project {
 		 * @param timeOffset    波のオフセット
 		 */
 		private drawWave(vertexNum:number,
-											strokeSize:number,
-		                 timeOffset:number):void {
+										 strokeSize:number,
+										 timeOffset:number):void {
 
 			const stageW = window.innerWidth;
 			const stageH = window.innerHeight;

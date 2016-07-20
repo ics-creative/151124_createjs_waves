@@ -27,7 +27,8 @@ var project;
             if (maxVertex === void 0) { maxVertex = 5; }
             if (debugMode === void 0) { debugMode = false; }
             _super.call(this);
-            /** 時間経過を示す媒介変数です。
+            /**
+             * 時間経過を示す媒介変数です。
              * @type {number}
              */
             this._time = 0;
