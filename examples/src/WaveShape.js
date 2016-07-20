@@ -58,7 +58,7 @@ var project;
          */
         WaveShape.prototype.handleTick = function (event) {
             // 媒介変数を更新
-            this._time += 0.005;
+            this._time += 0.002;
             // グラフィックをクリア
             this.graphics.clear();
             // 曲線を描き直す
@@ -92,8 +92,7 @@ var project;
                 var noiseNum = noise(i * 0.2, this._time + timeOffset) - 0.5;
                 // 目標座標を計算。画面の高さに比例
                 var targetY = noiseNum * stageH * 2;
-                // イージングの公式を使って、頂点座標をなめらかに変化させる
-                vertexArr[i] += (targetY - vertexArr[i]) * 0.05;
+                vertexArr[i] = targetY;
             }
             // 曲線を描くためにXY座標を計算
             var BASE_Y = stageH / 2; // 基準は画面の中央のY座標
@@ -159,6 +158,6 @@ var project;
             }
         };
         return WaveShape;
-    })(createjs.Shape);
+    }(createjs.Shape));
     project.WaveShape = WaveShape;
 })(project || (project = {}));

@@ -4,7 +4,7 @@ namespace project {
 	"use strict";
 
 	/** Processing のパーリンノイズ(連続した乱数)関数へのショートカットです。 */
-	var noise:Function;
+	let noise:Function;
 
 	/**
 	 * ウェーブ風グラフィックの表示クラスです。
@@ -74,7 +74,7 @@ namespace project {
 		 */
 		private handleTick(event:createjs.Event):void {
 			// 媒介変数を更新
-			this._time += 0.005;
+			this._time += 0.002;
 
 			// グラフィックをクリア
 			this.graphics.clear();
@@ -122,11 +122,10 @@ namespace project {
 			// 波の次の目標値を計算
 			for (let i = 0; i <= vertexNum; i++) {
 				// 乱数を取得、-0.5〜+0.5の範囲
-				let noiseNum = noise(i * 0.2, this._time + timeOffset) - 0.5;
+				const noiseNum = noise(i * 0.2, this._time + timeOffset) - 0.5;
 				// 目標座標を計算。画面の高さに比例
-				let targetY = noiseNum * stageH * 2;
-				// イージングの公式を使って、頂点座標をなめらかに変化させる
-				vertexArr[i] += (targetY - vertexArr[i]) * 0.05;
+				const targetY = noiseNum * stageH * 2;
+				vertexArr[i] = targetY;
 			}
 
 			// 曲線を描くためにXY座標を計算
@@ -149,18 +148,18 @@ namespace project {
 			for (let i = 0; i < points.length; i++) {
 				if (i >= 2) {
 					// マウスの軌跡を変数に保存
-					let p0x = points[i - 0].x;
-					let p0y = points[i - 0].y;
-					let p1x = points[i - 1].x;
-					let p1y = points[i - 1].y;
-					let p2x = points[i - 2].x;
-					let p2y = points[i - 2].y;
+					const p0x = points[i - 0].x;
+					const p0y = points[i - 0].y;
+					const p1x = points[i - 1].x;
+					const p1y = points[i - 1].y;
+					const p2x = points[i - 2].x;
+					const p2y = points[i - 2].y;
 					// カーブ用の頂点を割り出す
 
-					let curveStartX = (p2x + p1x) / 2;
-					let curveStartY = (p2y + p1y) / 2;
-					let curveEndX = (p0x + p1x) / 2;
-					let curveEndY = (p0y + p1y) / 2;
+					const curveStartX = (p2x + p1x) / 2;
+					const curveStartY = (p2y + p1y) / 2;
+					const curveEndX = (p0x + p1x) / 2;
+					const curveEndY = (p0y + p1y) / 2;
 					// カーブは中間点を結ぶ。マウスの座標は制御点として扱う。
 					this.graphics
 						.moveTo(curveStartX, curveStartY)
@@ -175,12 +174,12 @@ namespace project {
 			if (this._debugMode == true) {
 				for (let i = 0; i < points.length; i++) {
 					// マウスの軌跡を変数に保存
-					let p0x = points[i - 0].x;
-					let p0y = points[i - 0].y;
+					const p0x = points[i - 0].x;
+					const p0y = points[i - 0].y;
 
 					if (i > 0) {
-						let p1x = points[i - 1].x;
-						let p1y = points[i - 1].y;
+						const p1x = points[i - 1].x;
+						const p1y = points[i - 1].y;
 
 						// 線を描く
 						this.graphics
