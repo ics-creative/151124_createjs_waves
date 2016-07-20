@@ -46,5 +46,5 @@ var project;
             this.stageCalcInside.canvas.height = innerHeight;
         };
         return Main;
-    })();
+    }());
 })(project || (project = {}));

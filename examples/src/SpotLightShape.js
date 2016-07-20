@@ -56,6 +56,6 @@ var project;
                 .endFill();
         };
         return SpotLightShape;
-    })(createjs.Shape);
+    }(createjs.Shape));
     project.SpotLightShape = SpotLightShape;
 })(project || (project = {}));

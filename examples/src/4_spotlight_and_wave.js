@@ -68,5 +68,5 @@ var project;
             this.stageOverlay.canvas.height = innerHeight;
         };
         return Main;
-    })();
+    }());
 })(project || (project = {}));
