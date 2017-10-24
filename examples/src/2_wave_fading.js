@@ -5,13 +5,10 @@ window.addEventListener('load', () => {
 
 /**
  * パーティクルデモのメインクラスです。
- * @class project.Main
- * @author Yasunobu Ikeda a.k.a clockmaker
+ * @author Yasunobu Ikeda
  */
 class Main {
-  /**
-   * @constructor
-   */
+
   constructor() {
     // ウェーブ風グラフィック用のステージを作成
     this.stageCalcInside = new createjs.Stage('canvasWave');

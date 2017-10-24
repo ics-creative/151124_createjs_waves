@@ -6,8 +6,7 @@ window.addEventListener('load', () => {
 
 /**
  * パーティクルデモのメインクラスです。
- * @class project.Main
- * @author Yasunobu Ikeda a.k.a clockmaker
+ * @author Yasunobu Ikeda
  */
 class Main {
 

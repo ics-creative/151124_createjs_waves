@@ -1,11 +1,9 @@
 /**
  * スポットライト風グラフィックの表示クラスです。
- * @author Yasunobu Ikeda a.k.a clockmaker
+ * @author Yasunobu Ikeda
  */
 class SpotLightShape extends createjs.Shape {
-  /**
-   * コンストラクタ
-   */
+
   constructor() {
     super();
   }

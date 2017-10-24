@@ -5,22 +5,22 @@ window.addEventListener('load', () => {
 
 /**
  * パーティクルデモのメインクラスです。
- * @class project.Main
- * @author Yasunobu Ikeda a.k.a clockmaker
+ * @author Yasunobu Ikeda
  */
 class Main {
-  /**
-   * @constructor
-   */
+
   constructor() {
     // 初期設定
     this.stageCalcInside = new createjs.Stage('canvasWave');
+
     // パーティクルサンプルを作成
     const waveShape = new WaveShape();
     this.stageCalcInside.addChild(waveShape);
+
     // Tickerを作成
     createjs.Ticker.timingMode = createjs.Ticker.RAF;
     createjs.Ticker.on('tick', this.handleTick, this);
+
     // リサイズイベント
     this.handleResize();
     window.addEventListener('resize', () => {
