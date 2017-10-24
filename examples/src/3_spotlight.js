@@ -4,7 +4,7 @@
 var project;
 (function (project) {
     // 起動コード
-    window.addEventListener("load", function () {
+    window.addEventListener("load", () => {
         new Main();
     });
     /**
@@ -12,12 +12,11 @@ var project;
      * @class project.Main
      * @author Yasunobu Ikeda a.k.a clockmaker
      */
-    var Main = (function () {
+    class Main {
         /**
          * @constructor
          */
-        function Main() {
-            var _this = this;
+        constructor() {
             // スポットライト風グラフィック用のステージを作成
             this.stageOverlay = new createjs.Stage("canvasOverlay");
             // スポットライト風グラフィック
@@ -28,26 +27,25 @@ var project;
             createjs.Ticker.on("tick", this.handleTick, this);
             // リサイズイベント
             this.handleResize();
-            window.addEventListener("resize", function () {
-                _this.handleResize();
+            window.addEventListener("resize", () => {
+                this.handleResize();
             });
         }
         /**
          * エンターフレームイベント
          */
-        Main.prototype.handleTick = function () {
+        handleTick() {
             // スポットライト風グラフィックの描画
             this.spotLightShape.drawContents(innerWidth, innerHeight);
             this.stageOverlay.update();
-        };
+        }
         /**
          * リサイズイベント
          */
-        Main.prototype.handleResize = function () {
+        handleResize() {
             // スポットライト風グラフィック用ステージのりサイズ
             this.stageOverlay.canvas.width = innerWidth;
             this.stageOverlay.canvas.height = innerHeight;
-        };
-        return Main;
-    }());
+        }
+    }
 })(project || (project = {}));

@@ -4,7 +4,7 @@
 var project;
 (function (project) {
     // 起動コード
-    window.addEventListener("load", function () {
+    window.addEventListener("load", () => {
         new Main();
     });
     /**
@@ -12,12 +12,11 @@ var project;
      * @class project.Main
      * @author Yasunobu Ikeda a.k.a clockmaker
      */
-    var Main = (function () {
+    class Main {
         /**
          * @constructor
          */
-        function Main() {
-            var _this = this;
+        constructor() {
             // ウェーブ風グラフィック用のステージを作成
             this.stageCalcInside = new createjs.Stage(document.createElement("canvas"));
             this.stageCalcInside.autoClear = false;
@@ -34,17 +33,17 @@ var project;
             createjs.Ticker.on("tick", this.handleTick, this);
             // リサイズイベント
             this.handleResize();
-            window.addEventListener("resize", function () {
-                _this.handleResize();
+            window.addEventListener("resize", () => {
+                this.handleResize();
             });
         }
         /**
          * エンターフレームイベント
          */
-        Main.prototype.handleTick = function () {
+        handleTick() {
             // 薄く暗く塗る
-            var context = this.stageCalcInside.canvas.getContext("2d");
-            context.fillStyle = "rgba(0, 0, 0, 0.2)";
+            const context = this.stageCalcInside.canvas.getContext("2d");
+            context.fillStyle = `rgba(0, 0, 0, 0.2)`;
             context.fillRect(0, 0, this.stageCalcInside.canvas.width, this.stageCalcInside.canvas.height);
             // 波の表現を更新
             this.stageCalcInside.update();
@@ -52,21 +51,20 @@ var project;
             this.spotLightShape.drawContents(innerWidth, innerHeight);
             this.stageOverlay.update();
             // 2つのステージを合成する
-            var context2 = this.stageOverlay.canvas.getContext("2d");
+            const context2 = this.stageOverlay.canvas.getContext("2d");
             context2.globalCompositeOperation = "lighter";
             context2.drawImage(this.stageCalcInside.canvas, 0, 0);
-        };
+        }
         /**
          * リサイズイベント
          */
-        Main.prototype.handleResize = function () {
+        handleResize() {
             // ウェーブ風グラフィック用ステージのりサイズ
             this.stageCalcInside.canvas.width = innerWidth;
             this.stageCalcInside.canvas.height = innerHeight;
             // スポットライト風グラフィック用ステージのりサイズ
             this.stageOverlay.canvas.width = innerWidth;
             this.stageOverlay.canvas.height = innerHeight;
-        };
-        return Main;
-    }());
+        }
+    }
 })(project || (project = {}));

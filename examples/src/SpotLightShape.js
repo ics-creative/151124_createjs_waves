@@ -1,9 +1,4 @@
 ///<reference path="../libs/easeljs/easeljs.d.ts" />
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 var project;
 (function (project) {
     "use strict";
@@ -11,20 +6,19 @@ var project;
      * スポットライト風グラフィックの表示クラスです。
      * @author Yasunobu Ikeda a.k.a clockmaker
      */
-    var SpotLightShape = (function (_super) {
-        __extends(SpotLightShape, _super);
+    class SpotLightShape extends createjs.Shape {
         /**
          * コンストラクタ
          */
-        function SpotLightShape() {
-            _super.call(this);
+        constructor() {
+            super();
         }
         /**
          * 表示を更新します。
          * @param w    幅
          * @param h    高さ
          */
-        SpotLightShape.prototype.drawContents = function (w, h) {
+        drawContents(w, h) {
             // -------------------------
             // グラフィックのリセット
             // -------------------------
@@ -54,8 +48,7 @@ var project;
                 createjs.Graphics.getHSL(0, 0, 0, 0)], [0.0, 1.0], dx, dy, 0, dx, dy, size)
                 .drawCircle(dx, dy, size)
                 .endFill();
-        };
-        return SpotLightShape;
-    }(createjs.Shape));
+        }
+    }
     project.SpotLightShape = SpotLightShape;
 })(project || (project = {}));

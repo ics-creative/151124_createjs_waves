@@ -2,7 +2,7 @@
 
 namespace project {
 	"use strict";
-
+	
 	/**
 	 * スポットライト風グラフィックの表示クラスです。
 	 * @author Yasunobu Ikeda a.k.a clockmaker
