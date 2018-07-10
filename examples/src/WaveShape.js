@@ -4,7 +4,7 @@ let noise;
 /**
  * ウェーブ風グラフィックの表示クラスです。
  * @author Yasunobu Ikeda
- * @see FrocessingSample by nutsu http://wonderfl.net/c/kvXp
+ * @see FrocessingSample by nutsu http://beautifl.net/?id=246
  */
 class WaveShape extends createjs.Shape {
 

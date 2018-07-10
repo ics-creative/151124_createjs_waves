@@ -1,6 +1,5 @@
 // 起動コード
-
-window.addEventListener('load', () => {
+window.addEventListener('DOMContentLoaded', () => {
   new Main();
 });
 

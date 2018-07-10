@@ -10,8 +10,9 @@ class SpotLightShape extends createjs.Shape {
 
   /**
    * 表示を更新します。
-   * @param w    幅
-   * @param h    高さ
+   * @param w {number} 幅
+   * @param h {number} 高さ
+   * @return {void}
    */
   drawContents(w, h) {
     // -------------------------
