@@ -1,4 +1,4 @@
-# HTML5 Canvas で表現するウェーブ表現
+# HTML Canvas で表現するウェーブ表現
 
 ## チュートリアルサンプル
 
@@ -13,9 +13,17 @@
 
 ## 利用ライブラリ
 
-- [CreateJS](http://createjs.com/)
-- [Processing.js](http://processingjs.org/)
+
+- [noisejs](https://github.com/josephg/noisejs)
 
 ## 完成した演出の利用事例
 
 - [ICS MEDIA (トップページ)](https://ics.media/)
+
+## 補足
+
+[CreateJS](https://createjs.com/)を使って説明していましたが、現在のバージョンでは生のHTML Canvasで移植しました。
+
+CreateJSのバージョンの作例を確認したい方は、GitのTagsで残しているので、以下のリンクから確認ください。
+
+https://github.com/ics-creative/151124_createjs_waves/releases/tag/CreateJS
