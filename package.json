@@ -1,0 +1,11 @@
+{
+  "name": "151124_createjs_waves",
+  "version": "1.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "prettier": "^2.8.7"
+  },
+  "scripts": {
+    "fomart": "prettier --write ."
+  }
+}

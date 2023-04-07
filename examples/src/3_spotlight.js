@@ -1,48 +1,35 @@
-// 起動コード
-window.addEventListener('DOMContentLoaded', () => {
-  new Main();
-});
+import { drawSpotLight } from "./SpotLightShape.js";
+
+// 初期設定
+const canvas = document.getElementById("canvasOverlay");
+const context = canvas.getContext("2d");
+
+// Tickerを作成
+tick();
 
 /**
- * パーティクルデモのメインクラスです。
- * @author Yasunobu Ikeda
+ * エンターフレームイベント
  */
-class Main {
+function tick() {
+  // 薄く暗く塗る
+  context.fillStyle = `rgba(0, 0, 0, 0.2)`;
+  context.fillRect(0, 0, canvas.width, canvas.height);
 
-  constructor() {
-    // スポットライト風グラフィック用のステージを作成
-    this.stageOverlay = new createjs.Stage('canvasOverlay');
+  // スポットライト風グラフィックの描画
+  drawSpotLight(context, canvas.width, canvas.height);
 
-    // スポットライト風グラフィック
-    this.spotLightShape = new SpotLightShape();
-    this.stageOverlay.addChild(this.spotLightShape);
+  requestAnimationFrame(tick);
+}
 
-    // Tickerを作成
-    createjs.Ticker.timingMode = createjs.Ticker.RAF;
-    createjs.Ticker.on('tick', this.handleTick, this);
-
-    // リサイズイベント
-    this.handleResize();
-    window.addEventListener('resize', () => {
-      this.handleResize();
-    });
-  }
-
-  /**
-   * エンターフレームイベント
-   */
-  handleTick() {
-    // スポットライト風グラフィックの描画
-    this.spotLightShape.drawContents(innerWidth, innerHeight);
-    this.stageOverlay.update();
-  }
-
-  /**
-   * リサイズイベント
-   */
-  handleResize() {
-    // スポットライト風グラフィック用ステージのりサイズ
-    this.stageOverlay.canvas.width = innerWidth;
-    this.stageOverlay.canvas.height = innerHeight;
-  }
+// リサイズイベント
+handleResize();
+window.addEventListener("resize", () => {
+  handleResize();
+});
+/**
+ * リサイズイベント
+ */
+function handleResize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 }

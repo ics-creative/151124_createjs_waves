@@ -1,43 +1,35 @@
-// 起動コード
-window.addEventListener('DOMContentLoaded', () => {
-  new Main();
+import { drawWave } from "./WaveShape.js";
+
+// 初期設定
+const canvas = document.getElementById("canvasWave");
+const context = canvas.getContext("2d");
+
+// リサイズイベント
+handleResize();
+window.addEventListener("resize", () => {
+  handleResize();
 });
 
+// Tickerを作成
+tick();
+
 /**
- * パーティクルデモのメインクラスです。
- * @author Yasunobu Ikeda
+ * エンターフレームイベント
  */
-class Main {
+function tick() {
+  // クリアにする
+  context.clearRect(0, 0, canvas.width, canvas.height);
 
-  constructor() {
-    // 初期設定
-    this.stageCalcInside = new createjs.Stage('canvasWave');
-    // パーティクルサンプルを作成
-    const waveShape = new WaveShape(1, 4, true);
-    this.stageCalcInside.addChild(waveShape);
-    // Tickerを作成
-    createjs.Ticker.timingMode = createjs.Ticker.RAF;
-    createjs.Ticker.on('tick', this.handleTick, this);
-    // リサイズイベント
-    this.handleResize();
-    window.addEventListener('resize', () => {
-      this.handleResize();
-    });
-  }
+  // 波の表現を更新
+  drawWave(context, canvas.width, canvas.height, 1, 4, true);
 
-  /**
-   * エンターフレームイベント
-   */
-  handleTick() {
-    // 波の表現を更新
-    this.stageCalcInside.update();
-  }
+  requestAnimationFrame(tick);
+}
 
-  /**
-   * リサイズイベント
-   */
-  handleResize() {
-    this.stageCalcInside.canvas.width = innerWidth;
-    this.stageCalcInside.canvas.height = innerHeight;
-  }
+/**
+ * リサイズイベント
+ */
+function handleResize() {
+  canvas.width = window.innerWidth * window.devicePixelRatio;
+  canvas.height = window.innerHeight * window.devicePixelRatio;
 }

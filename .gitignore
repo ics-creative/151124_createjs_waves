@@ -9,3 +9,4 @@ typescript-compiler.xml
 vcs.xml
 workspace.xml
 .idea
+/node_modules
